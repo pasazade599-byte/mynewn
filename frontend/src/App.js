@@ -5,6 +5,7 @@ import { Toaster, toast } from 'sonner';
 import '@/App.css';
 
 // Pages
+import Landing from '@/pages/Landing';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Home from '@/pages/Home';
