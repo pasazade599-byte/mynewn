@@ -111,6 +111,7 @@ function App() {
       <div className="App">
         <BrowserRouter>
           <Routes>
+            <Route path="/welcome" element={!user ? <Landing /> : <Navigate to={user.role === 'admin' ? '/admin' : '/'} />} />
             <Route path="/login" element={!user ? <Login /> : <Navigate to={user.role === 'admin' ? '/admin' : '/'} />} />
             <Route path="/register" element={!user ? <Register /> : <Navigate to={user.role === 'admin' ? '/admin' : '/'} />} />
             
