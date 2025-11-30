@@ -16,15 +16,15 @@
 }
 
 .spinning {
-  animation: spin 2s linear;
+  animation: spin 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 @keyframes spin {
-  from {
+  0% {
     transform: rotate(0deg);
   }
-  to {
-    transform: rotate(360deg);
+  100% {
+    transform: rotate(1800deg);
   }
 }
 
