@@ -66,10 +66,10 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen pb-24 bg-gradient-to-b from-white to-slate-50">
+    <div className="min-h-screen pb-24 bg-gradient-to-b from-white via-slate-50 to-slate-100">
       {/* Header */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 rounded-b-3xl shadow-xl">
-        <div className="flex justify-between items-center mb-6">
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-8 rounded-b-[2.5rem] shadow-2xl">
+        <div className="flex justify-between items-center mb-8">
           <div>
             <p className="text-slate-300 text-sm mb-1">Xoş gəldiniz</p>
             <h1 className="text-2xl font-bold">{user.login}</h1>
