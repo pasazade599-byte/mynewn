@@ -89,25 +89,31 @@ const Home = () => {
         </div>
 
         {/* Balance Cards */}
-        <div className="grid grid-cols-2 gap-4">
-          <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Wallet className="w-5 h-5 text-[#D4AF37]" />
-              <p className="text-slate-300 text-sm">Əsas Balans</p>
+        <div className="grid grid-cols-2 gap-5">
+          <Card className="bg-white/10 backdrop-blur-md border-white/30 p-5 hover:bg-white/15 transition-all">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-full bg-[#D4AF37]/20 flex items-center justify-center">
+                <Wallet className="w-5 h-5 text-[#D4AF37]" />
+              </div>
+              <p className="text-slate-300 text-sm font-medium">Əsas Balans</p>
             </div>
-            <p className="text-2xl font-bold playfair gold-gradient-text" data-testid="main-balance">
-              {user.balance?.toFixed(2)} <span className="text-base">USDT</span>
+            <p className="text-3xl font-bold playfair gold-gradient-text" data-testid="main-balance">
+              {user.balance?.toFixed(2)}
             </p>
+            <p className="text-sm text-slate-400 mt-1">USDT</p>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="w-5 h-5 text-green-400" />
-              <p className="text-slate-300 text-sm">Gündəlik Qazanc</p>
+          <Card className="bg-white/10 backdrop-blur-md border-white/30 p-5 hover:bg-white/15 transition-all">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-green-400" />
+              </div>
+              <p className="text-slate-300 text-sm font-medium">Gündəlik</p>
             </div>
-            <p className="text-2xl font-bold playfair text-green-400" data-testid="daily-earnings">
-              {user.daily_earnings?.toFixed(2)} <span className="text-base">USDT</span>
+            <p className="text-3xl font-bold playfair text-green-400" data-testid="daily-earnings">
+              {user.daily_earnings?.toFixed(2)}
             </p>
+            <p className="text-sm text-slate-400 mt-1">USDT</p>
           </Card>
         </div>
       </div>
