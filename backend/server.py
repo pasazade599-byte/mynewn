@@ -746,6 +746,68 @@ async def get_notifications(current_user: dict = Depends(get_current_user)):
     ).sort('created_at', -1).limit(10).to_list(10)
     return notifications
 
+@api_router.get("/admin/campaigns")
+async def get_campaigns(current_user: dict = Depends(get_current_user)):
+    if current_user['role'] != 'admin':
+        raise HTTPException(status_code=403, detail="Admin icazəsi tələb olunur")
+    
+    campaigns = await db.campaigns.find({}, {'_id': 0}).sort('created_at', -1).to_list(100)
+    return campaigns
+
+@api_router.post("/admin/campaigns")
+async def create_campaign(campaign_data: dict, current_user: dict = Depends(get_current_user)):
+    if current_user['role'] != 'admin':
+        raise HTTPException(status_code=403, detail="Admin icazəsi tələb olunur")
+    
+    campaign_id = str(uuid.uuid4())
+    now = datetime.now(timezone.utc).isoformat()
+    
+    campaign = {
+        'id': campaign_id,
+        'title': campaign_data.get('title'),
+        'description': campaign_data.get('description'),
+        'discount_percent': campaign_data.get('discount_percent', 0),
+        'bonus_amount': campaign_data.get('bonus_amount', 0),
+        'min_deposit': campaign_data.get('min_deposit', 0),
+        'is_active': campaign_data.get('is_active', True),
+        'created_at': now
+    }
+    
+    await db.campaigns.insert_one(campaign)
+    return {'success': True, 'campaign_id': campaign_id}
+
+@api_router.put("/admin/campaigns/{campaign_id}")
+async def update_campaign(campaign_id: str, update_data: dict, current_user: dict = Depends(get_current_user)):
+    if current_user['role'] != 'admin':
+        raise HTTPException(status_code=403, detail="Admin icazəsi tələb olunur")
+    
+    await db.campaigns.update_one(
+        {'id': campaign_id},
+        {'$set': update_data}
+    )
+    return {'success': True}
+
+@api_router.delete("/admin/campaigns/{campaign_id}")
+async def delete_campaign(campaign_id: str, current_user: dict = Depends(get_current_user)):
+    if current_user['role'] != 'admin':
+        raise HTTPException(status_code=403, detail="Admin icazəsi tələb olunur")
+    
+    await db.campaigns.delete_one({'id': campaign_id})
+    return {'success': True}
+
+@api_router.post("/admin/vip-levels")
+async def create_vip_level(vip_data: dict, current_user: dict = Depends(get_current_user)):
+    if current_user['role'] != 'admin':
+        raise HTTPException(status_code=403, detail="Admin icazəsi tələb olunur")
+    
+    # Check if level already exists
+    existing = await db.vip_levels.find_one({'level': vip_data.get('level')})
+    if existing:
+        raise HTTPException(status_code=400, detail="Bu səviyyə artıq mövcuddur")
+    
+    await db.vip_levels.insert_one(vip_data)
+    return {'success': True}
+
 @api_router.get("/admin/stats")
 async def get_admin_stats(current_user: dict = Depends(get_current_user)):
     if current_user['role'] != 'admin':
