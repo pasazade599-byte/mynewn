@@ -10,7 +10,7 @@ import { ArrowUpRight, Copy, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 
-const DEPOSIT_ADDRESS = 'gLxo79237ALFOBQdmoq';
+const DEPOSIT_ADDRESS = 'TG1CF2xwduAtw7P8GTbePkkMkPXsVoDBEZ';
 
 const Deposit = () => {
   const navigate = useNavigate();
