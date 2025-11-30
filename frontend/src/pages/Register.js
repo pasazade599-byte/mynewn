@@ -34,11 +34,18 @@ const Register = () => {
         login: formData.login,
         password: formData.password,
       });
-      login(res.data.token, res.data.user);
-      toast.success('Qeydiyyat uğurlu oldu!');
-      navigate('/');
+      
+      if (res.data && res.data.token && res.data.user) {
+        login(res.data.token, res.data.user);
+        toast.success('Qeydiyyat uğurlu oldu!');
+        navigate('/');
+      } else {
+        throw new Error('Cavab səhvdir');
+      }
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Qeydiyyat uğursuz oldu');
+      console.error('Register error:', error);
+      const errorMsg = error.response?.data?.detail || error.message || 'Qeydiyyat uğursuz oldu';
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
