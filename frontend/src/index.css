@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,37 +8,38 @@
   * {
     @apply border-border;
   }
+  
   body {
-    @apply bg-slate-950 text-white font-[Inter];
+    @apply bg-slate-950 text-slate-100 font-[Inter];
     font-feature-settings: "rlig" 1, "calt" 1;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer utilities {
-  .gold-gradient-text {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+  .gold-text {
+    background: linear-gradient(135deg, #FFD700 0%, #FFC700 50%, #FFD700 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.3));
   }
   
-  .glass-card {
-    background: rgba(15, 23, 42, 0.6);
+  .premium-card {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.1);
   }
   
-  .premium-border {
-    border: 2px solid transparent;
-    background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)) padding-box,
-                linear-gradient(135deg, #FFD700, #FFA500) border-box;
+  .gold-glow {
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.15),
+                0 0 80px rgba(255, 215, 0, 0.08),
+                inset 0 0 40px rgba(255, 215, 0, 0.05);
   }
   
-  .glow-effect {
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.2),
-                0 0 60px rgba(255, 215, 0, 0.1);
+  .gold-border {
+    border: 2px solid;
+    border-image: linear-gradient(135deg, #FFD700, #FFA500, #FFD700) 1;
   }
 }
