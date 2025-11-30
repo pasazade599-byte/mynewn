@@ -5,7 +5,7 @@ import BottomNav from '@/components/BottomNav';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Wallet, TrendingUp, Gem, ArrowUpRight, Bell, X } from 'lucide-react';
+import { Wallet, TrendingUp, Gem, ArrowUpRight, Bell, X, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -20,7 +20,16 @@ const Home = () => {
 
   useEffect(() => {
     fetchData();
+    requestFullscreen();
   }, []);
+
+  const requestFullscreen = () => {
+    if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.log('Fullscreen request failed:', err);
+      });
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -31,7 +40,11 @@ const Home = () => {
       ]);
       
       setVipLevels(vipRes.data);
-      setNotifications(notifRes.data);
+      
+      // Filter only admin notifications
+      const adminNotifications = notifRes.data.filter(n => n.is_global);
+      setNotifications(adminNotifications);
+      
       updateUser(userRes.data);
       
       const current = vipRes.data.find(v => v.level === userRes.data.vip_level);
@@ -60,78 +73,83 @@ const Home = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-[#D4AF37] border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pb-24 bg-gradient-to-b from-white via-slate-50 to-slate-100">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-8 rounded-b-[2.5rem] shadow-2xl">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <p className="text-slate-300 text-sm mb-1">Xoş gəldiniz</p>
-            <h1 className="text-2xl font-bold">{user.login}</h1>
+    <div className="min-h-screen pb-28 relative">
+      {/* Premium Header */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-orange-500/10"></div>
+        <div className="relative px-6 pt-8 pb-8">
+          <div className="flex justify-between items-start mb-8">
+            <div>
+              <p className="text-slate-400 text-sm mb-1">Xoş gəldiniz</p>
+              <h1 className="text-3xl font-bold text-white">{user.login}</h1>
+            </div>
+            <button
+              data-testid="notifications-button"
+              onClick={() => setShowNotifications(true)}
+              className="relative p-3 bg-slate-800/50 backdrop-blur-sm border border-amber-500/20 rounded-2xl hover:bg-slate-800 hover:border-amber-500/40 transition-all active:scale-95"
+            >
+              <Bell className="w-6 h-6 text-amber-500" />
+              {notifications.length > 0 && (
+                <span className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-red-500 to-rose-500 rounded-full text-xs flex items-center justify-center font-bold text-white border-2 border-slate-950">
+                  {notifications.length}
+                </span>
+              )}
+            </button>
           </div>
-          <button
-            data-testid="notifications-button"
-            onClick={() => setShowNotifications(true)}
-            className="relative p-3 bg-white/10 rounded-full hover:bg-white/20 transition-all active:scale-95"
-          >
-            <Bell className="w-6 h-6" />
-            {notifications.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs flex items-center justify-center font-bold">
-                {notifications.length}
-              </span>
-            )}
-          </button>
-        </div>
 
-        {/* Balance Cards */}
-        <div className="grid grid-cols-2 gap-5">
-          <Card className="bg-white/10 backdrop-blur-md border-white/30 p-5 hover:bg-white/15 transition-all">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-full bg-[#D4AF37]/20 flex items-center justify-center">
-                <Wallet className="w-5 h-5 text-[#D4AF37]" />
+          {/* Balance Cards */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="premium-card rounded-3xl p-5 glow-pulse">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center">
+                  <Wallet className="w-5 h-5 text-white" />
+                </div>
+                <p className="text-slate-400 text-sm font-medium">Əsas Balans</p>
               </div>
-              <p className="text-slate-300 text-sm font-medium">Əsas Balans</p>
+              <p className="text-4xl font-bold gold-text playfair mb-1" data-testid="main-balance">
+                {user.balance?.toFixed(2)}
+              </p>
+              <p className="text-slate-500 text-sm">USDT</p>
             </div>
-            <p className="text-3xl font-bold playfair gold-gradient-text" data-testid="main-balance">
-              {user.balance?.toFixed(2)}
-            </p>
-            <p className="text-sm text-slate-400 mt-1">USDT</p>
-          </Card>
 
-          <Card className="bg-white/10 backdrop-blur-md border-white/30 p-5 hover:bg-white/15 transition-all">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-green-400" />
+            <div className="premium-card rounded-3xl p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-white" />
+                </div>
+                <p className="text-slate-400 text-sm font-medium">Gündəlik</p>
               </div>
-              <p className="text-slate-300 text-sm font-medium">Gündəlik</p>
+              <p className="text-4xl font-bold text-green-400 playfair mb-1" data-testid="daily-earnings">
+                {user.daily_earnings?.toFixed(2)}
+              </p>
+              <p className="text-slate-500 text-sm">USDT</p>
             </div>
-            <p className="text-3xl font-bold playfair text-green-400" data-testid="daily-earnings">
-              {user.daily_earnings?.toFixed(2)}
-            </p>
-            <p className="text-sm text-slate-400 mt-1">USDT</p>
-          </Card>
+          </div>
         </div>
       </div>
 
-      <div className="px-5 py-8 space-y-8">
-        {/* VIP Status */}
-        <Card className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-8 border-2 border-[#D4AF37]/40 relative overflow-hidden shadow-2xl">
-          <div className="absolute top-0 right-0 w-40 h-40 bg-[#D4AF37]/10 rounded-full -mr-20 -mt-20"></div>
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#D4AF37]/5 rounded-full -ml-16 -mb-16"></div>
+      <div className="px-6 py-6 space-y-6">
+        {/* VIP Status Card */}
+        <div className="premium-card rounded-3xl p-6 relative overflow-hidden border-2 border-amber-500/20">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-amber-500/20 to-transparent rounded-full -mr-20 -mt-20 blur-3xl"></div>
+          
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#D4AF37] to-[#F3E5AB] rounded-2xl flex items-center justify-center shadow-lg">
-                  <Gem className="w-8 h-8 text-slate-900" />
+                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 p-1 glow-pulse">
+                  <div className="w-full h-full rounded-[1.3rem] bg-slate-950 flex items-center justify-center">
+                    <Gem className="w-10 h-10 text-amber-500" />
+                  </div>
                 </div>
                 <div>
-                  <p className="text-slate-300 text-sm font-medium mb-1">VIP Səviyyə</p>
-                  <p className="text-3xl font-bold playfair gold-gradient-text" data-testid="vip-level">
+                  <p className="text-slate-400 text-sm font-medium mb-1">VIP Səviyyə</p>
+                  <p className="text-4xl font-bold gold-text playfair" data-testid="vip-level">
                     {user.vip_level === 0 ? 'Yoxdur' : `VIP ${user.vip_level}`}
                   </p>
                 </div>
@@ -139,120 +157,115 @@ const Home = () => {
             </div>
 
             {currentVip && (
-              <div className="grid grid-cols-3 gap-3">
-                <div className="bg-white/5 backdrop-blur-sm p-3 rounded-xl border border-white/10">
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                <div className="bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-800">
                   <p className="text-slate-400 text-xs mb-1">Gündəlik limit</p>
-                  <p className="font-bold text-[#D4AF37] text-lg">{currentVip.max_daily_earnings}</p>
-                  <p className="text-slate-400 text-xs">USDT</p>
+                  <p className="font-bold text-amber-500 text-xl">{currentVip.max_daily_earnings}</p>
+                  <p className="text-slate-500 text-xs mt-1">USDT</p>
                 </div>
-                <div className="bg-white/5 backdrop-blur-sm p-3 rounded-xl border border-white/10">
+                <div className="bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-800">
                   <p className="text-slate-400 text-xs mb-1">Sifarişlər</p>
-                  <p className="font-bold text-[#D4AF37] text-lg">{currentVip.orders_per_day}</p>
-                  <p className="text-slate-400 text-xs">ədəd</p>
+                  <p className="font-bold text-amber-500 text-xl">{currentVip.orders_per_day}</p>
+                  <p className="text-slate-500 text-xs mt-1">ədəd</p>
                 </div>
-                <div className="bg-white/5 backdrop-blur-sm p-3 rounded-xl border border-white/10">
+                <div className="bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-800">
                   <p className="text-slate-400 text-xs mb-1">Hər sifariş</p>
-                  <p className="font-bold text-[#D4AF37] text-lg">{currentVip.commission_per_order}</p>
-                  <p className="text-slate-400 text-xs">USDT</p>
+                  <p className="font-bold text-amber-500 text-xl">{currentVip.commission_per_order}</p>
+                  <p className="text-slate-500 text-xs mt-1">USDT</p>
                 </div>
               </div>
             )}
 
             {user.vip_level === 0 && (
-              <div className="mt-6">
-                <p className="text-slate-300 text-sm mb-4">VIP səviyyə əldə etmək üçün depozit edin</p>
-                <Button
-                  data-testid="deposit-button"
-                  onClick={() => navigate('/deposit')}
-                  className="w-full h-14 bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#D4AF37] text-slate-900 font-bold text-base hover:shadow-2xl hover:scale-[1.02] transition-all active:scale-95"
-                >
-                  Depozit et
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </div>
+              <Button
+                data-testid="deposit-button"
+                onClick={() => navigate('/deposit')}
+                className="w-full h-16 bg-gradient-to-r from-amber-500 via-amber-600 to-orange-500 text-white font-bold text-lg rounded-2xl hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] transition-all active:scale-95"
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                Depozit et
+              </Button>
             )}
 
             {user.vip_level > 0 && user.vip_level < 5 && (
-              <div className="mt-6">
-                <Button
-                  data-testid="upgrade-vip-button"
-                  onClick={upgradeVip}
-                  className="w-full h-14 bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#D4AF37] text-slate-900 font-bold text-base hover:shadow-2xl hover:scale-[1.02] transition-all active:scale-95"
-                >
-                  VIP Yüksəlt
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </div>
+              <Button
+                data-testid="upgrade-vip-button"
+                onClick={upgradeVip}
+                className="w-full h-16 bg-gradient-to-r from-amber-500 via-amber-600 to-orange-500 text-white font-bold text-lg rounded-2xl hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] transition-all active:scale-95"
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                VIP Yüksəlt
+              </Button>
             )}
           </div>
-        </Card>
-
-        {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-5">
-          <Button
-            data-testid="deposit-quick-button"
-            onClick={() => navigate('/deposit')}
-            className="h-28 bg-gradient-to-br from-white to-slate-50 border-2 border-slate-200 hover:border-green-400 hover:shadow-xl text-slate-900 font-bold transition-all active:scale-95 rounded-2xl"
-          >
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                <ArrowUpRight className="w-7 h-7 text-green-600" />
-              </div>
-              <span className="text-base">Depozit</span>
-            </div>
-          </Button>
-
-          <Button
-            data-testid="withdraw-quick-button"
-            onClick={() => navigate('/withdraw')}
-            className="h-28 bg-gradient-to-br from-white to-slate-50 border-2 border-slate-200 hover:border-red-400 hover:shadow-xl text-slate-900 font-bold transition-all active:scale-95 rounded-2xl"
-          >
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
-                <ArrowUpRight className="w-7 h-7 text-red-600 rotate-180" />
-              </div>
-              <span className="text-base">Çıxarış</span>
-            </div>
-          </Button>
         </div>
 
-        {/* All VIP Levels */}
+        {/* Quick Actions */}
+        <div className="grid grid-cols-2 gap-4">
+          <button
+            data-testid="deposit-quick-button"
+            onClick={() => navigate('/deposit')}
+            className="h-32 premium-card rounded-3xl p-6 hover:border-green-500/40 transition-all active:scale-95 flex flex-col items-center justify-center gap-3"
+          >
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+              <ArrowUpRight className="w-7 h-7 text-white" />
+            </div>
+            <span className="font-bold text-white text-lg">Depozit</span>
+          </button>
+
+          <button
+            data-testid="withdraw-quick-button"
+            onClick={() => navigate('/withdraw')}
+            className="h-32 premium-card rounded-3xl p-6 hover:border-red-500/40 transition-all active:scale-95 flex flex-col items-center justify-center gap-3"
+          >
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center">
+              <ArrowUpRight className="w-7 h-7 text-white rotate-180" />
+            </div>
+            <span className="font-bold text-white text-lg">Çıxarış</span>
+          </button>
+        </div>
+
+        {/* VIP Levels */}
         <div>
-          <h2 className="text-2xl font-bold playfair mb-6">VIP Səviyyələr</h2>
-          <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-white playfair mb-5">VIP Səviyyələr</h2>
+          <div className="space-y-3">
             {vipLevels.map((vip) => (
-              <Card
+              <div
                 key={vip.level}
                 data-testid={`vip-level-${vip.level}`}
-                className={`p-5 border-2 transition-all rounded-2xl ${
+                className={`premium-card rounded-3xl p-5 transition-all ${
                   user.vip_level === vip.level
-                    ? 'border-[#D4AF37] bg-gradient-to-br from-[#D4AF37]/10 to-[#D4AF37]/5 shadow-lg'
-                    : 'border-slate-200 hover:border-slate-300 hover:shadow-md'
+                    ? 'border-2 border-amber-500 glow-pulse'
+                    : 'hover:border-amber-500/30'
                 }`}
               >
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
+                    <div className={`w-16 h-16 rounded-2xl p-1 ${
                       user.vip_level === vip.level
-                        ? 'bg-gradient-to-br from-[#D4AF37] to-[#F3E5AB]'
-                        : 'bg-slate-100'
+                        ? 'bg-gradient-to-br from-amber-500 to-orange-600'
+                        : 'bg-slate-800'
                     }`}>
-                      <Gem className={`w-7 h-7 ${
-                        user.vip_level === vip.level ? 'text-slate-900' : 'text-slate-400'
-                      }`} />
+                      <div className="w-full h-full rounded-xl bg-slate-950 flex items-center justify-center">
+                        <Gem className={`w-8 h-8 ${
+                          user.vip_level === vip.level ? 'text-amber-500' : 'text-slate-600'
+                        }`} />
+                      </div>
                     </div>
                     <div>
-                      <p className="font-bold text-xl playfair gold-gradient-text">{vip.name}</p>
-                      <p className="text-sm text-slate-600 mt-1">Depozit: {vip.deposit_required.toLocaleString()} USDT</p>
+                      <p className={`font-bold text-xl playfair mb-1 ${
+                        user.vip_level === vip.level ? 'gold-text' : 'text-white'
+                      }`}>{vip.name}</p>
+                      <p className="text-sm text-slate-400">Depozit: {vip.deposit_required.toLocaleString()} USDT</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs text-slate-500 mb-1">Gündəlik limit</p>
-                    <p className="font-bold text-2xl text-[#D4AF37]">{vip.max_daily_earnings}</p>
+                    <p className="text-xs text-slate-500 mb-1">Limit</p>
+                    <p className="font-bold text-2xl text-amber-500">{vip.max_daily_earnings}</p>
                     <p className="text-xs text-slate-500">USDT</p>
                   </div>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         </div>
@@ -262,33 +275,33 @@ const Home = () => {
 
       {/* Notifications Dialog */}
       <Dialog open={showNotifications} onOpenChange={setShowNotifications}>
-        <DialogContent className="max-w-md max-h-[600px] overflow-y-auto">
+        <DialogContent className="max-w-md max-h-[600px] overflow-y-auto bg-slate-900 border-2 border-amber-500/20">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Bell className="w-5 h-5 text-[#D4AF37]" />
+            <DialogTitle className="flex items-center gap-2 text-white">
+              <Bell className="w-5 h-5 text-amber-500" />
               Bildirişlər
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-3 mt-4">
             {notifications.length === 0 ? (
               <div className="text-center py-8">
-                <Bell className="w-16 h-16 mx-auto mb-3 text-slate-300" />
-                <p className="text-slate-600">Bildiriş yoxdur</p>
+                <Bell className="w-16 h-16 mx-auto mb-3 text-slate-700" />
+                <p className="text-slate-400">Bildiriş yoxdur</p>
               </div>
             ) : (
               notifications.map((notif) => (
-                <Card key={notif.id} className="p-4 border-l-4 border-[#D4AF37]">
+                <div key={notif.id} className="premium-card p-4 border-l-4 border-amber-500 rounded-2xl">
                   <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-bold text-slate-900">{notif.title}</h4>
+                    <h4 className="font-bold text-white">{notif.title}</h4>
                     <button
                       onClick={() => setNotifications(notifications.filter(n => n.id !== notif.id))}
-                      className="text-slate-400 hover:text-slate-600"
+                      className="text-slate-400 hover:text-white"
                     >
                       <X className="w-4 h-4" />
                     </button>
                   </div>
-                  <p className="text-sm text-slate-600 mb-2">{notif.message}</p>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-sm text-slate-300 mb-2">{notif.message}</p>
+                  <p className="text-xs text-slate-500">
                     {new Date(notif.created_at).toLocaleDateString('az-AZ', {
                       day: '2-digit',
                       month: 'long',
@@ -297,7 +310,7 @@ const Home = () => {
                       minute: '2-digit'
                     })}
                   </p>
-                </Card>
+                </div>
               ))
             )}
           </div>
