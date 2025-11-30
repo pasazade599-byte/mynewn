@@ -60,19 +60,29 @@ const AdminVIP = () => {
     <div className="min-h-screen pb-24 bg-gradient-to-b from-white to-slate-50">
       {/* Header */}
       <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 rounded-b-3xl shadow-xl mb-6">
-        <div className="flex items-center gap-4">
-          <Button
-            data-testid="back-button"
-            onClick={() => navigate('/admin')}
-            variant="ghost"
-            className="text-white hover:bg-white/10 p-2"
-          >
-            <ArrowLeft className="w-6 h-6" />
-          </Button>
-          <div>
-            <h1 className="text-2xl font-bold playfair">VIP Paketləri</h1>
-            <p className="text-slate-300 text-sm">VIP səviyyələrini idarə edin</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button
+              data-testid="back-button"
+              onClick={() => navigate('/admin')}
+              variant="ghost"
+              className="text-white hover:bg-white/10 p-2"
+            >
+              <ArrowLeft className="w-6 h-6" />
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold playfair">VIP Paketləri</h1>
+              <p className="text-slate-300 text-sm">VIP səviyyələrini idarə edin</p>
+            </div>
           </div>
+          <Button
+            data-testid="create-vip-button"
+            onClick={() => navigate('/admin/vip/create')}
+            className="bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] text-slate-900 font-bold"
+          >
+            <Edit className="w-4 h-4 mr-2" />
+            Yeni VIP
+          </Button>
         </div>
       </div>
 
