@@ -118,19 +118,20 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="px-4 py-6 space-y-6">
+      <div className="px-5 py-8 space-y-8">
         {/* VIP Status */}
-        <Card className="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 border-[#D4AF37]/30 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37]/10 rounded-full -mr-16 -mt-16"></div>
+        <Card className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-8 border-2 border-[#D4AF37]/40 relative overflow-hidden shadow-2xl">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-[#D4AF37]/10 rounded-full -mr-20 -mt-20"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#D4AF37]/5 rounded-full -ml-16 -mb-16"></div>
           <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#D4AF37] to-[#F3E5AB] rounded-full flex items-center justify-center">
-                  <Gem className="w-6 h-6 text-slate-900" />
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#D4AF37] to-[#F3E5AB] rounded-2xl flex items-center justify-center shadow-lg">
+                  <Gem className="w-8 h-8 text-slate-900" />
                 </div>
                 <div>
-                  <p className="text-slate-300 text-sm">VIP Səviyyə</p>
-                  <p className="text-2xl font-bold playfair gold-gradient-text" data-testid="vip-level">
+                  <p className="text-slate-300 text-sm font-medium mb-1">VIP Səviyyə</p>
+                  <p className="text-3xl font-bold playfair gold-gradient-text" data-testid="vip-level">
                     {user.vip_level === 0 ? 'Yoxdur' : `VIP ${user.vip_level}`}
                   </p>
                 </div>
