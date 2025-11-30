@@ -133,6 +133,9 @@ function App() {
             <Route path="/admin/campaigns" element={user && user.role === 'admin' ? <AdminCampaigns /> : <Navigate to="/login" />} />
             <Route path="/admin/withdrawals" element={user && user.role === 'admin' ? <AdminWithdrawals /> : <Navigate to="/login" />} />
             <Route path="/admin/notifications" element={user && user.role === 'admin' ? <AdminNotifications /> : <Navigate to="/login" />} />
+            
+            {/* Redirect root to welcome if not logged in */}
+            <Route path="*" element={!user ? <Navigate to="/welcome" /> : <Navigate to={user.role === 'admin' ? '/admin' : '/'} />} />
           </Routes>
         </BrowserRouter>
         <Toaster position="top-center" richColors />
