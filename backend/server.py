@@ -179,53 +179,59 @@ class UserFarm(BaseModel):
 # Auth endpoints
 @api_router.post("/auth/register")
 async def register(req: RegisterRequest):
-    # Check if user exists
-    existing = await db.users.find_one({'login': req.login}, {'_id': 0})
-    if existing:
-        raise HTTPException(status_code=400, detail="Login artıq mövcuddur")
-    
-    user_id = str(uuid.uuid4())
-    now = datetime.now(timezone.utc).isoformat()
-    
-    user_data = {
-        'id': user_id,
-        'login': req.login,
-        'password': hash_password(req.password),
-        'role': 'user',
-        'balance': 0.0,
-        'daily_earnings': 0.0,
-        'total_earnings': 0.0,
-        'vip_level': 0,
-        'deposit_amount': 0.0,
-        'wallet_address': None,
-        'created_at': now,
-        'last_login': now
-    }
-    
-    await db.users.insert_one(user_data)
-    
-    # Initialize mining status
-    mining_data = {
-        'user_id': user_id,
-        'tap_count': 0,
-        'last_tap_time': None,
-        'daily_taps': 0,
-        'last_reset': now
-    }
-    await db.mining.insert_one(mining_data)
-    
-    # Initialize spin history
-    spin_data = {
-        'user_id': user_id,
-        'last_spin_date': '',
-        'total_spins': 0
-    }
-    await db.spins.insert_one(spin_data)
-    
-    token = create_token(user_id)
-    user_data.pop('password')
-    
-    return {'token': token, 'user': user_data}
+    try:
+        # Check if user exists
+        existing = await db.users.find_one({'login': req.login}, {'_id': 0})
+        if existing:
+            raise HTTPException(status_code=400, detail="Login artıq mövcuddur")
+        
+        user_id = str(uuid.uuid4())
+        now = datetime.now(timezone.utc).isoformat()
+        
+        user_data = {
+            'id': user_id,
+            'login': req.login,
+            'password': hash_password(req.password),
+            'role': 'user',
+            'balance': 0.0,
+            'daily_earnings': 0.0,
+            'total_earnings': 0.0,
+            'vip_level': 0,
+            'deposit_amount': 0.0,
+            'wallet_address': None,
+            'created_at': now,
+            'last_login': now
+        }
+        
+        await db.users.insert_one(user_data)
+        
+        # Initialize mining status
+        mining_data = {
+            'user_id': user_id,
+            'tap_count': 0,
+            'last_tap_time': None,
+            'daily_taps': 0,
+            'last_reset': now
+        }
+        await db.mining.insert_one(mining_data)
+        
+        # Initialize spin history
+        spin_data = {
+            'user_id': user_id,
+            'last_spin_date': '',
+            'total_spins': 0
+        }
+        await db.spins.insert_one(spin_data)
+        
+        token = create_token(user_id)
+        user_data.pop('password')
+        
+        return {'token': token, 'user': user_data}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Register error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Qeydiyyat zamanı xəta baş verdi")
 
 @api_router.post("/auth/login")
 async def login(req: LoginRequest):
