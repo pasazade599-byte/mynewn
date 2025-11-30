@@ -76,7 +76,7 @@ const Home = () => {
           </div>
           <button
             data-testid="notifications-button"
-            onClick={() => setNotifications([])}
+            onClick={() => setShowNotifications(true)}
             className="relative p-3 bg-white/10 rounded-full hover:bg-white/20 transition-all active:scale-95"
           >
             <Bell className="w-6 h-6" />
