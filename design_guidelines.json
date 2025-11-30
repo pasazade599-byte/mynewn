@@ -1,0 +1,199 @@
+{
+  "identity": {
+    "persona": "E1",
+    "philosophy": "Fusion over Imitation. Emotion First. Content is King.",
+    "anti_patterns": [
+      "Generic Bootstrap layouts",
+      "Purple/Teal gradients (unless specified)",
+      "Symmetry everywhere",
+      "Default Inter font for headings"
+    ]
+  },
+  "theme": {
+    "name": "Premium White Gold",
+    "mode": "light",
+    "emotional_archetype": "Jewel & Luxury",
+    "vibe": "Trust, Wealth, Clarity, Premium",
+    "colors": {
+      "background": {
+        "default": "#FFFFFF",
+        "subtle": "#F8FAFC",
+        "paper": "#F1F5F9"
+      },
+      "foreground": {
+        "default": "#0F172A",
+        "muted": "#64748B",
+        "inverse": "#FFFFFF"
+      },
+      "primary": {
+        "default": "#D4AF37",
+        "hover": "#B5952F",
+        "foreground": "#FFFFFF",
+        "gradient": "linear-gradient(135deg, #D4AF37 0%, #F3E5AB 50%, #D4AF37 100%)"
+      },
+      "secondary": {
+        "default": "#0F172A",
+        "hover": "#1E293B",
+        "foreground": "#FFFFFF"
+      },
+      "accent": {
+        "default": "#3B82F6",
+        "hover": "#2563EB",
+        "foreground": "#FFFFFF"
+      },
+      "status": {
+        "success": "#10B981",
+        "warning": "#F59E0B",
+        "error": "#E11D48",
+        "info": "#3B82F6"
+      },
+      "border": {
+        "default": "#E2E8F0",
+        "active": "#D4AF37"
+      }
+    },
+    "typography": {
+      "headings": {
+        "family": "Playfair Display, serif",
+        "weights": ["600", "700", "800"],
+        "usage": "VIP Levels, Hero Titles, Big Numbers"
+      },
+      "body": {
+        "family": "Manrope, sans-serif",
+        "weights": ["400", "500", "600"],
+        "usage": "UI Text, Buttons, Inputs, Descriptions"
+      }
+    },
+    "radius": {
+      "default": "0.75rem",
+      "button": "9999px",
+      "card": "1rem"
+    },
+    "shadows": {
+      "card": "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
+      "hover": "0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025)",
+      "glow": "0 0 15px rgba(212, 175, 55, 0.3)"
+    }
+  },
+  "layout_strategy": {
+    "mobile_first": true,
+    "container_width": "max-w-md mx-auto md:max-w-5xl",
+    "spacing": {
+      "section": "py-8 md:py-12",
+      "element": "gap-4 md:gap-6"
+    },
+    "grid_system": {
+      "dashboard": "grid grid-cols-2 gap-4",
+      "vip_list": "flex flex-col gap-4",
+      "products": "grid grid-cols-2 gap-3"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] text-slate-900 font-bold shadow-lg hover:shadow-xl transition-all active:scale-95",
+      "secondary": "bg-slate-900 text-white hover:bg-slate-800",
+      "outline": "border-2 border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/10"
+    },
+    "cards": {
+      "base": "bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all",
+      "vip": "bg-gradient-to-br from-slate-900 to-slate-800 text-white border border-[#D4AF37]/30 relative overflow-hidden",
+      "order": "bg-white border border-slate-100 p-4 flex flex-col gap-2"
+    },
+    "inputs": {
+      "default": "bg-slate-50 border-slate-200 focus:border-[#D4AF37] focus:ring-[#D4AF37]/20 rounded-xl h-12"
+    },
+    "navigation": {
+      "bottom_bar": "fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-slate-100 flex justify-around py-3 z-50 safe-area-pb"
+    }
+  },
+  "assets": {
+    "images": {
+      "products": [
+        {
+          "url": "https://images.unsplash.com/photo-1610109790326-9a21dfe969b7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBjb3NtZXRpY3MlMjBib3R0bGUlMjBnb2xkJTIwd2hpdGV8ZW58MHx8fHwxNzY0NTA2MjMyfDA&ixlib=rb-4.1.0&q=85",
+          "alt": "Luxury Gold Cosmetic Bottle",
+          "category": "product"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1662215793383-e9052b5e576b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjBjb3NtZXRpY3MlMjBib3R0bGUlMjBnb2xkJTIwd2hpdGV8ZW58MHx8fHwxNzY0NTA2MjMyfDA&ixlib=rb-4.1.0&q=85",
+          "alt": "Perfume Bottle",
+          "category": "product"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1760804775871-ccf97811de4d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBnaWZ0JTIwYm94JTIwZ29sZCUyMHJpYmJvbnxlbnwwfHx8fDE3NjQ1MDYyNDV8MA&ixlib=rb-4.1.0&q=85",
+          "alt": "Gift Box",
+          "category": "reward"
+        }
+      ],
+      "gamification": [
+        {
+          "url": "https://images.unsplash.com/photo-1643823062948-32438ef15142?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwxfHxnb2xkJTIwY29pbiUyMHBpbGUlMjAzZCUyMHJlbmRlcnxlbnwwfHx8fDE3NjQ1MDYyMzN8MA&ixlib=rb-4.1.0&q=85",
+          "alt": "Gold Coin Pile",
+          "category": "mining"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1603037750986-9b5feaa76b39?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwxfHxjb2xvcmZ1bCUyMGZvcnR1bmUlMjB3aGVlbCUyMDNkJTIwcmVuZGVyfGVufDB8fHx8MTc2NDUwNjIzNXww&ixlib=rb-4.1.0&q=85",
+          "alt": "Spin Wheel",
+          "category": "wheel"
+        }
+      ],
+      "payment": [
+        {
+          "url": "https://images.unsplash.com/photo-1641543476812-4076f0a83403?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHx0ZXRoZXIlMjB1c2R0JTIwZ29sZCUyMGNvaW4lMjAzZHxlbnwwfHx8fDE3NjQ1MDYyNDR8MA&ixlib=rb-4.1.0&q=85",
+          "alt": "USDT Coin",
+          "category": "payment"
+        }
+      ]
+    },
+    "icons": {
+      "library": "lucide-react",
+      "preferred": ["Wallet", "Gem", "Pickaxe", "Users", "Home", "Settings", "ArrowUpRight", "ArrowDownLeft", "History", "Gift"]
+    }
+  },
+  "localization": {
+    "language": "az",
+    "dictionary": {
+      "login": "Giriş",
+      "register": "Qeydiyyat",
+      "balance": "Balans",
+      "deposit": "Depozit",
+      "withdraw": "Çıxarış",
+      "vip_level": "VIP Səviyyə",
+      "mining": "Mayninq",
+      "spin_wheel": "Çarx",
+      "orders": "Sifarişlər",
+      "profile": "Profil",
+      "home": "Ana Səhifə",
+      "task": "Tapşırıq",
+      "commission": "Komissiya",
+      "team": "Komanda",
+      "invite": "Dəvət et",
+      "success": "Uğurlu",
+      "pending": "Gözləmədə",
+      "rejected": "İmtina",
+      "daily_earnings": "Gündəlik Qazanc",
+      "total_assets": "Ümumi Aktivlər"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Use 'Manrope' for all body text and 'Playfair Display' for headings (VIP levels, big amounts).",
+    "Implement a 'Gold Gradient' text effect for VIP levels (e.g., VIP 1, VIP 5).",
+    "Ensure the 'Mining' page has a large, tappable central element (use the Gold Coin image or a CSS circle).",
+    "The 'Spin Wheel' should be visually prominent. If a library isn't available, use a CSS rotation animation on the wheel image.",
+    "For 'Orders', use the cosmetic product images. Create a card that looks like an e-commerce order summary.",
+    "Deposit address MUST be: 'gLxo79237ALFOBQdmoq'. Display it with a copy button.",
+    "Withdrawal simulation: Show a form for TRC20 address and amount. Show 'Pending' status for 0-128 hours.",
+    "Admin Panel: Must be functional. Allow changing VIP stats and approving withdrawals.",
+    "Mobile Responsiveness: The app should feel like a native mobile app. Use a bottom navigation bar for the main user interface.",
+    "Do NOT use generic 'Lorem Ipsum'. Use realistic Azerbaijani text for descriptions.",
+    "Use 'sonner' for all notifications (Success: Green, Error: Red).",
+    "Add 'data-testid' to all interactive elements."
+  ],
+  "universal_guidelines": [
+    "Avoid generic centered layouts. Use asymmetry where possible.",
+    "Use glassmorphism for the bottom navigation and sticky headers.",
+    "Ensure high contrast for text. Gold text on white can be hard to read; use a dark shadow or background if needed.",
+    "Animations: Add 'active:scale-95' to all buttons for tactile feedback.",
+    "Do not use 'Inter' font. Import 'Manrope' and 'Playfair Display' from Google Fonts."
+  ]
+}
