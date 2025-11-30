@@ -123,6 +123,15 @@ const AdminDashboard = () => {
             <Bell className="w-6 h-6 mr-4 text-green-600" />
             Bildiriş göndər
           </Button>
+
+          <Button
+            data-testid="manage-campaigns-button"
+            onClick={() => navigate('/admin/campaigns')}
+            className="w-full h-16 justify-start bg-white border-2 border-slate-200 hover:border-purple-400 text-slate-900 font-semibold text-base hover:shadow-lg transition-all"
+          >
+            <Settings className="w-6 h-6 mr-4 text-purple-600" />
+            Kampaniyalar
+          </Button>
         </div>
       </div>
     </div>
