@@ -159,28 +159,28 @@ const Home = () => {
             )}
 
             {user.vip_level === 0 && (
-              <div className="mt-4">
-                <p className="text-slate-300 text-sm mb-3">VIP səviyyə əldə etmək üçün depozit edin</p>
+              <div className="mt-6">
+                <p className="text-slate-300 text-sm mb-4">VIP səviyyə əldə etmək üçün depozit edin</p>
                 <Button
                   data-testid="deposit-button"
                   onClick={() => navigate('/deposit')}
-                  className="w-full bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] text-slate-900 font-bold hover:shadow-xl transition-all active:scale-95"
+                  className="w-full h-14 bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#D4AF37] text-slate-900 font-bold text-base hover:shadow-2xl hover:scale-[1.02] transition-all active:scale-95"
                 >
                   Depozit et
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
+                  <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </div>
             )}
 
             {user.vip_level > 0 && user.vip_level < 5 && (
-              <div className="mt-4">
+              <div className="mt-6">
                 <Button
                   data-testid="upgrade-vip-button"
                   onClick={upgradeVip}
-                  className="w-full bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] text-slate-900 font-bold hover:shadow-xl transition-all active:scale-95"
+                  className="w-full h-14 bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#D4AF37] text-slate-900 font-bold text-base hover:shadow-2xl hover:scale-[1.02] transition-all active:scale-95"
                 >
                   VIP Yüksəlt
-                  <ArrowUpRight className="w-4 h-4 ml-2" />
+                  <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </div>
             )}
