@@ -4,7 +4,8 @@ import { API, AuthContext } from '@/App';
 import BottomNav from '@/components/BottomNav';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Wallet, TrendingUp, Gem, ArrowUpRight, Bell } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Wallet, TrendingUp, Gem, ArrowUpRight, Bell, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
