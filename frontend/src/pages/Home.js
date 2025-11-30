@@ -91,18 +91,27 @@ const Home = () => {
               <p className="text-slate-400 text-sm mb-1">Xoş gəldiniz</p>
               <h1 className="text-3xl font-bold text-white">{user.login}</h1>
             </div>
-            <button
-              data-testid="notifications-button"
-              onClick={() => setShowNotifications(true)}
-              className="relative p-3 bg-slate-800/50 backdrop-blur-sm border border-amber-500/20 rounded-2xl hover:bg-slate-800 hover:border-amber-500/40 transition-all active:scale-95"
-            >
-              <Bell className="w-6 h-6 text-amber-500" />
-              {notifications.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-red-500 to-rose-500 rounded-full text-xs flex items-center justify-center font-bold text-white border-2 border-slate-950">
-                  {notifications.length}
-                </span>
-              )}
-            </button>
+            <div className="flex gap-2">
+              <button
+                data-testid="notifications-button"
+                onClick={() => setShowNotifications(true)}
+                className="relative p-3 bg-slate-800/50 backdrop-blur-sm border border-amber-500/20 rounded-2xl hover:bg-slate-800 hover:border-amber-500/40 transition-all active:scale-95"
+              >
+                <Bell className="w-6 h-6 text-amber-500" />
+                {notifications.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-red-500 to-rose-500 rounded-full text-xs flex items-center justify-center font-bold text-white border-2 border-slate-950">
+                    {notifications.length}
+                  </span>
+                )}
+              </button>
+              <button
+                data-testid="menu-button"
+                onClick={() => setDrawerOpen(true)}
+                className="p-3 bg-slate-800/50 backdrop-blur-sm border border-amber-500/20 rounded-2xl hover:bg-slate-800 hover:border-amber-500/40 transition-all active:scale-95"
+              >
+                <Menu className="w-6 h-6 text-amber-500" />
+              </button>
+            </div>
           </div>
 
           {/* Balance Cards */}
