@@ -203,7 +203,8 @@ async def register(req: RegisterRequest):
             'last_login': now
         }
         
-        await db.users.insert_one(user_data)
+        # Insert and get clean data
+        result = await db.users.insert_one(user_data.copy())
         
         # Initialize mining status
         mining_data = {
@@ -224,9 +225,23 @@ async def register(req: RegisterRequest):
         await db.spins.insert_one(spin_data)
         
         token = create_token(user_id)
-        user_data.pop('password')
         
-        return {'token': token, 'user': user_data}
+        # Return clean data without password
+        response_user = {
+            'id': user_data['id'],
+            'login': user_data['login'],
+            'role': user_data['role'],
+            'balance': user_data['balance'],
+            'daily_earnings': user_data['daily_earnings'],
+            'total_earnings': user_data['total_earnings'],
+            'vip_level': user_data['vip_level'],
+            'deposit_amount': user_data['deposit_amount'],
+            'wallet_address': user_data['wallet_address'],
+            'created_at': user_data['created_at'],
+            'last_login': user_data['last_login']
+        }
+        
+        return {'token': token, 'user': response_user}
     except HTTPException:
         raise
     except Exception as e:
