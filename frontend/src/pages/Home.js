@@ -218,26 +218,38 @@ const Home = () => {
 
         {/* All VIP Levels */}
         <div>
-          <h2 className="text-xl font-bold playfair mb-4">VIP Səviyyələr</h2>
-          <div className="space-y-3">
+          <h2 className="text-2xl font-bold playfair mb-6">VIP Səviyyələr</h2>
+          <div className="space-y-4">
             {vipLevels.map((vip) => (
               <Card
                 key={vip.level}
                 data-testid={`vip-level-${vip.level}`}
-                className={`p-4 border-2 transition-all ${
+                className={`p-5 border-2 transition-all rounded-2xl ${
                   user.vip_level === vip.level
-                    ? 'border-[#D4AF37] bg-[#D4AF37]/5'
-                    : 'border-slate-200 hover:border-slate-300'
+                    ? 'border-[#D4AF37] bg-gradient-to-br from-[#D4AF37]/10 to-[#D4AF37]/5 shadow-lg'
+                    : 'border-slate-200 hover:border-slate-300 hover:shadow-md'
                 }`}
               >
                 <div className="flex justify-between items-center">
-                  <div>
-                    <p className="font-bold text-lg playfair gold-gradient-text">{vip.name}</p>
-                    <p className="text-sm text-slate-600">Depozit: {vip.deposit_required} USDT</p>
+                  <div className="flex items-center gap-4">
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
+                      user.vip_level === vip.level
+                        ? 'bg-gradient-to-br from-[#D4AF37] to-[#F3E5AB]'
+                        : 'bg-slate-100'
+                    }`}>
+                      <Gem className={`w-7 h-7 ${
+                        user.vip_level === vip.level ? 'text-slate-900' : 'text-slate-400'
+                      }`} />
+                    </div>
+                    <div>
+                      <p className="font-bold text-xl playfair gold-gradient-text">{vip.name}</p>
+                      <p className="text-sm text-slate-600 mt-1">Depozit: {vip.deposit_required.toLocaleString()} USDT</p>
+                    </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-slate-600">Gündəlik limit</p>
-                    <p className="font-bold text-lg text-[#D4AF37]">{vip.max_daily_earnings} USDT</p>
+                    <p className="text-xs text-slate-500 mb-1">Gündəlik limit</p>
+                    <p className="font-bold text-2xl text-[#D4AF37]">{vip.max_daily_earnings}</p>
+                    <p className="text-xs text-slate-500">USDT</p>
                   </div>
                 </div>
               </Card>
