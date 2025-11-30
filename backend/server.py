@@ -148,6 +148,16 @@ class SpinHistory(BaseModel):
     last_spin_date: str
     total_spins: int
 
+class Campaign(BaseModel):
+    id: str
+    title: str
+    description: str
+    discount_percent: float
+    bonus_amount: float
+    min_deposit: float
+    is_active: bool
+    created_at: str
+
 # Auth endpoints
 @api_router.post("/auth/register")
 async def register(req: RegisterRequest):
