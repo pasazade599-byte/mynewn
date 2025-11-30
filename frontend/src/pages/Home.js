@@ -283,6 +283,7 @@ const Home = () => {
       </div>
 
       <BottomNav />
+      <DrawerMenu isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
       {/* Notifications Dialog */}
       <Dialog open={showNotifications} onOpenChange={setShowNotifications}>
