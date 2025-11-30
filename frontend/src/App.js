@@ -125,6 +125,8 @@ function App() {
             <Route path="/admin" element={user && user.role === 'admin' ? <AdminDashboard /> : <Navigate to="/login" />} />
             <Route path="/admin/users" element={user && user.role === 'admin' ? <AdminUsers /> : <Navigate to="/login" />} />
             <Route path="/admin/vip" element={user && user.role === 'admin' ? <AdminVIP /> : <Navigate to="/login" />} />
+            <Route path="/admin/vip/create" element={user && user.role === 'admin' ? <AdminVIPCreate /> : <Navigate to="/login" />} />
+            <Route path="/admin/campaigns" element={user && user.role === 'admin' ? <AdminCampaigns /> : <Navigate to="/login" />} />
             <Route path="/admin/withdrawals" element={user && user.role === 'admin' ? <AdminWithdrawals /> : <Navigate to="/login" />} />
             <Route path="/admin/notifications" element={user && user.role === 'admin' ? <AdminNotifications /> : <Navigate to="/login" />} />
           </Routes>
