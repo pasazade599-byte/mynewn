@@ -45,33 +45,42 @@ const Spin = () => {
 
       <div className="px-4 space-y-6">
         {/* Spin Wheel */}
-        <div className="flex flex-col items-center justify-center py-8">
-          <div className={`w-72 h-72 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#F3E5AB] shadow-2xl flex items-center justify-center relative overflow-hidden ${
-            spinning ? 'spinning' : ''
-          }`}>
-            {/* Wheel segments visualization */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-1 p-4">
-                <div className="bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                  <p className="font-bold text-white text-xl">0.5</p>
-                </div>
-                <div className="bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                  <p className="font-bold text-white text-xl">5</p>
-                </div>
-                <div className="bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                  <p className="font-bold text-white text-xl">2</p>
-                </div>
-                <div className="bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                  <p className="font-bold text-white text-xl">10</p>
+        <div className="flex flex-col items-center justify-center py-12 relative">
+          {/* Wheel pointer */}
+          <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20">
+            <div className="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-t-[30px] border-t-red-600 drop-shadow-xl"></div>
+          </div>
+          
+          <div className="relative w-80 h-80">
+            {/* Wheel - only this rotates */}
+            <div className={`absolute inset-0 rounded-full shadow-2xl ${spinning ? 'spinning' : ''}`}>
+              {/* Wheel background with segments */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#D4AF37] via-[#F3E5AB] to-[#D4AF37] border-8 border-white shadow-[0_0_40px_rgba(212,175,55,0.4)]">
+                {/* 8 segments */}
+                {[0.5, 20, 1, 10, 2, 5, 1, 2].map((value, index) => {
+                  const rotation = (360 / 8) * index;
+                  return (
+                    <div
+                      key={index}
+                      className="absolute top-1/2 left-1/2 origin-left"
+                      style={{
+                        transform: `rotate(${rotation}deg)`,
+                        width: '50%',
+                        height: '2px'
+                      }}
+                    >
+                      <div className="absolute left-[60%] -translate-y-1/2 bg-white/30 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/40">
+                        <p className="font-bold text-white text-sm whitespace-nowrap">{value} USDT</p>
+                      </div>
+                    </div>
+                  );
+                })}
+                
+                {/* Center circle */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-white shadow-xl flex items-center justify-center border-4 border-[#D4AF37]">
+                  <Gift className="w-12 h-12 text-[#D4AF37]" />
                 </div>
               </div>
-            </div>
-            
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-            
-            <div className="relative z-10 text-center">
-              <Gift className="w-16 h-16 text-white mx-auto mb-2" />
-              <p className="text-white font-bold text-lg">0.5 - 20 USDT</p>
             </div>
           </div>
 
