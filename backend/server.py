@@ -554,13 +554,13 @@ async def create_deposit(amount: float, current_user: dict = Depends(get_current
         'type': 'deposit',
         'amount': amount,
         'status': 'pending',
-        'wallet_address': 'gLxo79237ALFOBQdmoq',
+        'wallet_address': 'TG1CF2xwduAtw7P8GTbePkkMkPXsVoDBEZ',
         'created_at': now,
         'completed_at': None
     }
     await db.transactions.insert_one(tx_data)
     
-    return {'success': True, 'transaction_id': tx_id, 'wallet_address': 'gLxo79237ALFOBQdmoq'}
+    return {'success': True, 'transaction_id': tx_id, 'wallet_address': 'TG1CF2xwduAtw7P8GTbePkkMkPXsVoDBEZ'}
 
 @api_router.post("/transactions/withdraw")
 async def create_withdrawal(amount: float, wallet_address: str, current_user: dict = Depends(get_current_user)):
