@@ -18,6 +18,8 @@ import Profile from '@/pages/Profile';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
 import AdminUsers from '@/pages/admin/AdminUsers';
 import AdminVIP from '@/pages/admin/AdminVIP';
+import AdminVIPCreate from '@/pages/admin/AdminVIPCreate';
+import AdminCampaigns from '@/pages/admin/AdminCampaigns';
 import AdminWithdrawals from '@/pages/admin/AdminWithdrawals';
 import AdminNotifications from '@/pages/admin/AdminNotifications';
 
