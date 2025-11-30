@@ -158,6 +158,24 @@ class Campaign(BaseModel):
     is_active: bool
     created_at: str
 
+class FarmAnimal(BaseModel):
+    id: str
+    name: str
+    description: str
+    icon: str
+    price: float
+    hourly_income: float
+    collect_hours: int
+    is_active: bool
+
+class UserFarm(BaseModel):
+    id: str
+    user_id: str
+    animal_id: str
+    purchased_at: str
+    last_collect: Optional[str]
+    total_collected: float
+
 # Auth endpoints
 @api_router.post("/auth/register")
 async def register(req: RegisterRequest):
