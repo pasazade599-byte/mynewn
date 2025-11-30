@@ -233,6 +233,50 @@ const Home = () => {
       </div>
 
       <BottomNav />
+
+      {/* Notifications Dialog */}
+      <Dialog open={showNotifications} onOpenChange={setShowNotifications}>
+        <DialogContent className="max-w-md max-h-[600px] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Bell className="w-5 h-5 text-[#D4AF37]" />
+              Bildirişlər
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 mt-4">
+            {notifications.length === 0 ? (
+              <div className="text-center py-8">
+                <Bell className="w-16 h-16 mx-auto mb-3 text-slate-300" />
+                <p className="text-slate-600">Bildiriş yoxdur</p>
+              </div>
+            ) : (
+              notifications.map((notif) => (
+                <Card key={notif.id} className="p-4 border-l-4 border-[#D4AF37]">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-bold text-slate-900">{notif.title}</h4>
+                    <button
+                      onClick={() => setNotifications(notifications.filter(n => n.id !== notif.id))}
+                      className="text-slate-400 hover:text-slate-600"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <p className="text-sm text-slate-600 mb-2">{notif.message}</p>
+                  <p className="text-xs text-slate-400">
+                    {new Date(notif.created_at).toLocaleDateString('az-AZ', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </p>
+                </Card>
+              ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
