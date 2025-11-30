@@ -16,6 +16,7 @@ const Home = () => {
   const [currentVip, setCurrentVip] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     fetchData();
