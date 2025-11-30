@@ -2,10 +2,11 @@ import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { API, AuthContext } from '@/App';
 import BottomNav from '@/components/BottomNav';
+import DrawerMenu from '@/components/DrawerMenu';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Wallet, TrendingUp, Gem, ArrowUpRight, Bell, X, Sparkles } from 'lucide-react';
+import { Wallet, TrendingUp, Gem, ArrowUpRight, Bell, X, Sparkles, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
