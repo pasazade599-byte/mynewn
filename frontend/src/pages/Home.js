@@ -139,18 +139,21 @@ const Home = () => {
             </div>
 
             {currentVip && (
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-300">Gündəlik limit:</span>
-                  <span className="font-semibold text-[#D4AF37]">{currentVip.max_daily_earnings} USDT</span>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-white/5 backdrop-blur-sm p-3 rounded-xl border border-white/10">
+                  <p className="text-slate-400 text-xs mb-1">Gündəlik limit</p>
+                  <p className="font-bold text-[#D4AF37] text-lg">{currentVip.max_daily_earnings}</p>
+                  <p className="text-slate-400 text-xs">USDT</p>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-300">Sifariş sayı:</span>
-                  <span className="font-semibold text-[#D4AF37]">{currentVip.orders_per_day} ədəd</span>
+                <div className="bg-white/5 backdrop-blur-sm p-3 rounded-xl border border-white/10">
+                  <p className="text-slate-400 text-xs mb-1">Sifarişlər</p>
+                  <p className="font-bold text-[#D4AF37] text-lg">{currentVip.orders_per_day}</p>
+                  <p className="text-slate-400 text-xs">ədəd</p>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-300">Sifariş başına:</span>
-                  <span className="font-semibold text-[#D4AF37]">{currentVip.commission_per_order} USDT</span>
+                <div className="bg-white/5 backdrop-blur-sm p-3 rounded-xl border border-white/10">
+                  <p className="text-slate-400 text-xs mb-1">Hər sifariş</p>
+                  <p className="font-bold text-[#D4AF37] text-lg">{currentVip.commission_per_order}</p>
+                  <p className="text-slate-400 text-xs">USDT</p>
                 </div>
               </div>
             )}
