@@ -447,21 +447,26 @@ async def tap_mining(current_user: dict = Depends(get_current_user)):
     if not mining:
         raise HTTPException(status_code=404, detail="Mining məlumatları tapılmadı")
     
-    # Check if we need to reset
-    if mining['last_tap_time']:
+    now = datetime.now(timezone.utc)
+    
+    # Check if we need to reset (every 6 hours)
+    if mining.get('last_tap_time'):
         last_tap = datetime.fromisoformat(mining['last_tap_time'])
-        now = datetime.now(timezone.utc)
         hours_passed = (now - last_tap).total_seconds() / 3600
         
         if hours_passed >= 6:
+            # Reset for new 6-hour period
+            await db.mining.update_one(
+                {'user_id': current_user['id']},
+                {'$set': {'tap_count': 0}}
+            )
             mining['tap_count'] = 0
     
-    if mining['tap_count'] >= 500:
-        raise HTTPException(status_code=400, detail="Gündəlik limit dolub. 6 saat sonra yenidən cəhd edin.")
+    if mining.get('tap_count', 0) >= 500:
+        raise HTTPException(status_code=400, detail="Limit doldu. 6 saat sonra yenidən.")
     
     # Add tap
-    now = datetime.now(timezone.utc).isoformat()
-    new_tap_count = mining['tap_count'] + 1
+    new_tap_count = mining.get('tap_count', 0) + 1
     reward = 0.01
     
     new_balance = current_user['balance'] + reward
@@ -471,7 +476,7 @@ async def tap_mining(current_user: dict = Depends(get_current_user)):
         {'user_id': current_user['id']},
         {'$set': {
             'tap_count': new_tap_count,
-            'last_tap_time': now,
+            'last_tap_time': now.isoformat(),
             'daily_taps': mining.get('daily_taps', 0) + 1
         }}
     )
@@ -491,8 +496,8 @@ async def tap_mining(current_user: dict = Depends(get_current_user)):
         'type': 'mining',
         'amount': reward,
         'status': 'completed',
-        'created_at': now,
-        'completed_at': now
+        'created_at': now.isoformat(),
+        'completed_at': now.isoformat()
     }
     await db.transactions.insert_one(tx_data)
     
