@@ -188,26 +188,30 @@ const Home = () => {
         </Card>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-5">
           <Button
             data-testid="deposit-quick-button"
             onClick={() => navigate('/deposit')}
-            className="h-20 bg-white border-2 border-slate-200 hover:border-[#D4AF37] text-slate-900 font-semibold hover:shadow-lg transition-all active:scale-95"
+            className="h-28 bg-gradient-to-br from-white to-slate-50 border-2 border-slate-200 hover:border-green-400 hover:shadow-xl text-slate-900 font-bold transition-all active:scale-95 rounded-2xl"
           >
-            <div className="flex flex-col items-center gap-1">
-              <ArrowUpRight className="w-6 h-6 text-green-600" />
-              <span>Depozit</span>
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                <ArrowUpRight className="w-7 h-7 text-green-600" />
+              </div>
+              <span className="text-base">Depozit</span>
             </div>
           </Button>
 
           <Button
             data-testid="withdraw-quick-button"
             onClick={() => navigate('/withdraw')}
-            className="h-20 bg-white border-2 border-slate-200 hover:border-[#D4AF37] text-slate-900 font-semibold hover:shadow-lg transition-all active:scale-95"
+            className="h-28 bg-gradient-to-br from-white to-slate-50 border-2 border-slate-200 hover:border-red-400 hover:shadow-xl text-slate-900 font-bold transition-all active:scale-95 rounded-2xl"
           >
-            <div className="flex flex-col items-center gap-1">
-              <ArrowUpRight className="w-6 h-6 text-red-600 rotate-180" />
-              <span>Çıxarış</span>
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                <ArrowUpRight className="w-7 h-7 text-red-600 rotate-180" />
+              </div>
+              <span className="text-base">Çıxarış</span>
             </div>
           </Button>
         </div>
