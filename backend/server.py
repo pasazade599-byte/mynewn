@@ -831,6 +831,187 @@ async def create_vip_level(vip_data: dict, current_user: dict = Depends(get_curr
     await db.vip_levels.insert_one(vip_data)
     return {'success': True}
 
+# Farm endpoints
+@api_router.get("/farm/animals")
+async def get_farm_animals():
+    animals = await db.farm_animals.find({'is_active': True}, {'_id': 0}).to_list(100)
+    if not animals:
+        # Initialize default animals
+        default_animals = [
+            {'id': str(uuid.uuid4()), 'name': 'İnək', 'description': 'Süd istehsalı', 'icon': '🐄', 'price': 500, 'hourly_income': 2.5, 'collect_hours': 4, 'is_active': True},
+            {'id': str(uuid.uuid4()), 'name': 'Toyuq', 'description': 'Yumurta istehsalı', 'icon': '🐔', 'price': 200, 'hourly_income': 1.0, 'collect_hours': 2, 'is_active': True},
+            {'id': str(uuid.uuid4()), 'name': 'Qoyun', 'description': 'Yun istehsalı', 'icon': '🐑', 'price': 350, 'hourly_income': 1.8, 'collect_hours': 3, 'is_active': True},
+            {'id': str(uuid.uuid4()), 'name': 'Keçi', 'description': 'Süd və yun', 'icon': '🐐', 'price': 400, 'hourly_income': 2.0, 'collect_hours': 3, 'is_active': True},
+        ]
+        await db.farm_animals.insert_many(default_animals)
+        animals = default_animals
+    return animals
+
+@api_router.get("/farm/user-farm")
+async def get_user_farm(current_user: dict = Depends(get_current_user)):
+    farms = await db.user_farms.find({'user_id': current_user['id']}, {'_id': 0}).to_list(100)
+    
+    # Add animal details
+    for farm in farms:
+        animal = await db.farm_animals.find_one({'id': farm['animal_id']}, {'_id': 0})
+        if animal:
+            farm['animal'] = animal
+            
+            # Calculate available to collect
+            if farm.get('last_collect'):
+                last_collect = datetime.fromisoformat(farm['last_collect'])
+                now = datetime.now(timezone.utc)
+                hours_passed = (now - last_collect).total_seconds() / 3600
+                
+                if hours_passed >= animal['collect_hours']:
+                    farm['can_collect'] = True
+                    farm['available_amount'] = animal['hourly_income'] * animal['collect_hours']
+                else:
+                    farm['can_collect'] = False
+                    farm['available_amount'] = 0
+                    farm['time_remaining'] = animal['collect_hours'] - hours_passed
+            else:
+                farm['can_collect'] = False
+                farm['available_amount'] = 0
+                farm['time_remaining'] = animal['collect_hours']
+    
+    return farms
+
+@api_router.post("/farm/buy")
+async def buy_farm_animal(animal_id: str, current_user: dict = Depends(get_current_user)):
+    animal = await db.farm_animals.find_one({'id': animal_id}, {'_id': 0})
+    if not animal or not animal.get('is_active'):
+        raise HTTPException(status_code=404, detail="Heyvan tapılmadı")
+    
+    if current_user['balance'] < animal['price']:
+        raise HTTPException(status_code=400, detail="Balans kifayət deyil")
+    
+    # Deduct balance
+    new_balance = current_user['balance'] - animal['price']
+    await db.users.update_one(
+        {'id': current_user['id']},
+        {'$set': {'balance': new_balance}}
+    )
+    
+    now = datetime.now(timezone.utc).isoformat()
+    
+    # Create farm entry
+    farm_data = {
+        'id': str(uuid.uuid4()),
+        'user_id': current_user['id'],
+        'animal_id': animal_id,
+        'purchased_at': now,
+        'last_collect': now,
+        'total_collected': 0.0
+    }
+    await db.user_farms.insert_one(farm_data)
+    
+    return {'success': True, 'new_balance': new_balance, 'farm': farm_data}
+
+@api_router.post("/farm/collect/{farm_id}")
+async def collect_farm(farm_id: str, current_user: dict = Depends(get_current_user)):
+    farm = await db.user_farms.find_one({'id': farm_id, 'user_id': current_user['id']}, {'_id': 0})
+    if not farm:
+        raise HTTPException(status_code=404, detail="Ferma tapılmadı")
+    
+    animal = await db.farm_animals.find_one({'id': farm['animal_id']}, {'_id': 0})
+    if not animal:
+        raise HTTPException(status_code=404, detail="Heyvan məlumatı tapılmadı")
+    
+    # Check if can collect
+    if farm.get('last_collect'):
+        last_collect = datetime.fromisoformat(farm['last_collect'])
+        now = datetime.now(timezone.utc)
+        hours_passed = (now - last_collect).total_seconds() / 3600
+        
+        if hours_passed < animal['collect_hours']:
+            raise HTTPException(status_code=400, detail="Hələ toplamaq vaxtı deyil")
+        
+        # Calculate income
+        income = animal['hourly_income'] * animal['collect_hours']
+        
+        # Update balances
+        new_balance = current_user['balance'] + income
+        new_total = current_user['total_earnings'] + income
+        
+        await db.users.update_one(
+            {'id': current_user['id']},
+            {'$set': {'balance': new_balance, 'total_earnings': new_total}}
+        )
+        
+        # Update farm
+        await db.user_farms.update_one(
+            {'id': farm_id},
+            {'$set': {
+                'last_collect': now.isoformat(),
+                'total_collected': farm.get('total_collected', 0) + income
+            }}
+        )
+        
+        # Create transaction
+        tx_data = {
+            'id': str(uuid.uuid4()),
+            'user_id': current_user['id'],
+            'type': 'farm',
+            'amount': income,
+            'status': 'completed',
+            'created_at': now.isoformat(),
+            'completed_at': now.isoformat()
+        }
+        await db.transactions.insert_one(tx_data)
+        
+        return {'success': True, 'collected': income, 'new_balance': new_balance}
+    else:
+        raise HTTPException(status_code=400, detail="Məlumat xətası")
+
+# Admin Farm endpoints
+@api_router.get("/admin/farm/animals")
+async def admin_get_animals(current_user: dict = Depends(get_current_user)):
+    if current_user['role'] != 'admin':
+        raise HTTPException(status_code=403, detail="Admin icazəsi tələb olunur")
+    
+    animals = await db.farm_animals.find({}, {'_id': 0}).to_list(100)
+    return animals
+
+@api_router.post("/admin/farm/animals")
+async def admin_create_animal(animal_data: dict, current_user: dict = Depends(get_current_user)):
+    if current_user['role'] != 'admin':
+        raise HTTPException(status_code=403, detail="Admin icazəsi tələb olunur")
+    
+    animal_id = str(uuid.uuid4())
+    animal = {
+        'id': animal_id,
+        'name': animal_data.get('name'),
+        'description': animal_data.get('description'),
+        'icon': animal_data.get('icon'),
+        'price': animal_data.get('price'),
+        'hourly_income': animal_data.get('hourly_income'),
+        'collect_hours': animal_data.get('collect_hours'),
+        'is_active': animal_data.get('is_active', True)
+    }
+    
+    await db.farm_animals.insert_one(animal)
+    return {'success': True, 'animal_id': animal_id}
+
+@api_router.put("/admin/farm/animals/{animal_id}")
+async def admin_update_animal(animal_id: str, animal_data: dict, current_user: dict = Depends(get_current_user)):
+    if current_user['role'] != 'admin':
+        raise HTTPException(status_code=403, detail="Admin icazəsi tələb olunur")
+    
+    await db.farm_animals.update_one(
+        {'id': animal_id},
+        {'$set': animal_data}
+    )
+    return {'success': True}
+
+@api_router.delete("/admin/farm/animals/{animal_id}")
+async def admin_delete_animal(animal_id: str, current_user: dict = Depends(get_current_user)):
+    if current_user['role'] != 'admin':
+        raise HTTPException(status_code=403, detail="Admin icazəsi tələb olunur")
+    
+    await db.farm_animals.delete_one({'id': animal_id})
+    return {'success': True}
+
 @api_router.get("/admin/stats")
 async def get_admin_stats(current_user: dict = Depends(get_current_user)):
     if current_user['role'] != 'admin':
